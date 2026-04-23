@@ -1,0 +1,13 @@
+PedidoID,Indicador,Quantidade,Percentual
+PED-2024-0750,Total Equipamentos,1200,1
+PED-2024-0750,Quantidade Prevista (Acumulada),950,0.79
+PED-2024-0750,Quantidade Realizada (Acumulada),936,0.78
+PED-2024-0750,Saldo a Instalar,264,0.22
+PED-2024-0751,Total Equipamentos,800,1
+PED-2024-0751,Quantidade Prevista (Acumulada),600,0.75
+PED-2024-0751,Quantidade Realizada (Acumulada),500,0.62
+PED-2024-0751,Saldo a Instalar,300,0.38
+PED-2024-0752,Total Equipamentos,1500,1
+PED-2024-0752,Quantidade Prevista (Acumulada),1400,0.93
+PED-2024-0752,Quantidade Realizada (Acumulada),1365,0.91
+PED-2024-0752,Saldo a Instalar,135,0.09

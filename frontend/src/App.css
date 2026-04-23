@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --mks-green: #0a6b3f;
+  --mks-green-light: #2eb872;
+  --mks-green-soft: #a8e6cf;
+  --bg-color: #f1f5f9;
+  --card-bg: #ffffff;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.top-logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.top-logo h1 {
+  font-style: italic;
+  font-weight: 800;
+  color: var(--mks-green);
+  font-size: 2.2rem;
+  letter-spacing: -1px;
+}
+
+.top-logo span {
+  font-size: 0.9rem;
+  background-color: var(--mks-green);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 10px;
+  font-style: normal;
+  text-transform: uppercase;
+}
+
+.header-banner {
+  background-color: var(--mks-green);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.header-banner h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  border: 1px solid var(--border-color);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+}
+
+/* Visao Geral Layout */
+.visao-geral {
+  display: flex;
+  gap: 30px;
+}
+
+.visao-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.info-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.info-box.highlight {
+  border-left: 4px solid var(--mks-green);
+}
+
+.info-icon {
+  color: var(--mks-green);
+}
+
+.visao-chart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Balanco Tabela */
+.mks-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mks-table th {
+  background-color: var(--mks-green);
+  color: white;
+  text-align: left;
+  padding: 12px;
+  font-size: 0.9rem;
+}
+
+.mks-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
+
+.mks-table tr:last-child td {
+  border-bottom: none;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.status-resolvido {
+  background-color: var(--mks-green);
+  color: white;
+}
+
+.status-emandamento {
+  background-color: #facc15;
+  color: #854d0e;
+}
+
+.status-atrasado {
+  background-color: #ef4444;
+  color: white;
+}
+
+.progress-container {
+  margin-bottom: 15px;
+}
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.progress-bar-bg {
+  height: 20px;
+  background-color: #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--mks-green-soft);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  font-size: 0.8rem;
+  color: var(--mks-green);
+  font-weight: 700;
+}

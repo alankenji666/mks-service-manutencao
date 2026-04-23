@@ -1,0 +1,4 @@
+PedidoID,Percentual,StatusPrazo
+PED-2024-0750,0.78,No Prazo
+PED-2024-0751,0.62,Atrasado
+PED-2024-0752,0.91,No Prazo

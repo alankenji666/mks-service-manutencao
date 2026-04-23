@@ -1,0 +1,7 @@
+PedidoID,Data,Descricao,Impacto,ImpactoDias,AcaoCorretiva,Status
+PED-2024-0750,2026-04-15,Atraso na liberação da área,Médio,2,Reunião ajuste cronograma,Resolvido
+PED-2024-0750,2026-04-18,Divergência técnica no acabamento,Alto,5,Acionado laudo técnico,Em andamento
+PED-2024-0750,2026-04-20,Problema em inversores,Baixo,1,Troca imediata,Resolvido
+PED-2024-0751,2026-04-10,Falta de equipe no local,Alto,3,Reforço de equipe,Atrasado
+PED-2024-0751,2026-04-12,Erro de instalação elétrica,Médio,2,Revisão técnica,Resolvido
+PED-2024-0752,2026-04-05,Atraso fornecedor,Baixo,1,Contato fornecedor,Resolvido

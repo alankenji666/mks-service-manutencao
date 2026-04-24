@@ -2,12 +2,24 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import { useParams } from 'react-router-dom';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  LineController,
+  BarController,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { FileText, User } from 'lucide-react';
 import '../App.css';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, LineController, BarController, Title, Tooltip, Legend);
 
 const socket = io('https://mks-service-manutencao.onrender.com');
 

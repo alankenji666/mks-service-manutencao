@@ -9,7 +9,7 @@ import '../App.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
-const socket = io('http://localhost:3001');
+const socket = io('https://mks-service-manutencao.onrender.com');
 
 function Tracking() {
   const { token } = useParams();
@@ -18,7 +18,7 @@ function Tracking() {
 
   useEffect(() => {
     // Initial fetch using the protected token route
-    axios.get(`http://localhost:3001/api/tracking/${token}`)
+    axios.get(`https://mks-service-manutencao.onrender.com/api/tracking/${token}`)
       .then(res => setData(res.data))
       .catch(err => {
         console.error(err);

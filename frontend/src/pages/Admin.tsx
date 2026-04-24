@@ -19,7 +19,7 @@ export default function Admin() {
   });
 
   const fetchDashboard = () => {
-    axios.get('http://localhost:3001/api/dashboard')
+    axios.get('https://mks-service-manutencao.onrender.com/api/dashboard')
       .then(res => setData(res.data))
       .catch(err => console.error(err));
   };
@@ -35,7 +35,7 @@ export default function Admin() {
     // Atualiza token ou email dinamicamente mantendo a estrutura antiga
     if (!currentToken || email) {
        try {
-         const res = await axios.put(`http://localhost:3001/api/admin/pedidos/${pedido.PedidoID}`, {
+         const res = await axios.put(`https://mks-service-manutencao.onrender.com/api/admin/pedidos/${pedido.PedidoID}`, {
             email: email === '' ? undefined : email
          });
          currentToken = res.data.token;
@@ -76,7 +76,7 @@ export default function Admin() {
   const handleCreate = async () => {
     if(!form.PedidoID) return alert("O ID do Pedido é obrigatório!");
     try {
-      await axios.post('http://localhost:3001/api/admin/pedidos', form);
+      await axios.post('https://mks-service-manutencao.onrender.com/api/admin/pedidos', form);
       setCreateModalOpen(false);
       fetchDashboard();
     } catch(e) {
@@ -86,7 +86,7 @@ export default function Admin() {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:3001/api/admin/pedidos/${activePedido.PedidoID}`, {
+      await axios.put(`https://mks-service-manutencao.onrender.com/api/admin/pedidos/${activePedido.PedidoID}`, {
         Coordenador: form.Coordenador,
         ResponsavelCampo: form.ResponsavelCampo,
         StatusPrazo: form.StatusPrazo,
@@ -101,7 +101,7 @@ export default function Admin() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3001/api/admin/pedidos/${activePedido.PedidoID}`);
+      await axios.delete(`https://mks-service-manutencao.onrender.com/api/admin/pedidos/${activePedido.PedidoID}`);
       setDeleteAlertOpen(false);
       setEditModalOpen(false);
       fetchDashboard();

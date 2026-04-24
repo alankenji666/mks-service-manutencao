@@ -6,6 +6,7 @@ import { JWT } from 'google-auth-library';
 import { GoogleSpreadsheet } from 'google-spreadsheet';
 import * as fs from 'fs';
 import * as path from 'path';
+import { randomUUID } from 'crypto';
 
 const app = express();
 app.use(cors());
@@ -80,6 +81,141 @@ app.get('/api/dashboard/:pedidoId', async (req, res) => {
   } catch(e) {
     console.error(e);
     res.status(500).json({ error: "Erro ao ler dados da planilha" });
+  }
+});
+
+// Endpoint Público para o Cliente (Baseado no Token Criptografado)
+app.get('/api/tracking/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+    const data = await fetchFromSheets();
+    
+    // Obscure route: We only find by TokenAcesso!
+    const pedidoBase = data.pedidos.find((p: any) => p.TokenAcesso === token);
+    
+    if(!pedidoBase) return res.status(404).json({error: "Link de rastreio inválido ou expirado"});
+
+    const pedidoId = pedidoBase.PedidoID;
+    const responseData = {
+      pedido: pedidoBase,
+      metricas: data.metricas.filter((m: any) => m.PedidoID === pedidoId),
+      progresso: data.progresso.filter((p: any) => p.PedidoID === pedidoId),
+      ocorrencias: data.ocorrencias.filter((o: any) => o.PedidoID === pedidoId),
+    };
+
+    res.json(responseData);
+  } catch(e) {
+    console.error(e);
+    res.status(500).json({ error: "Erro interno" });
+  }
+});
+
+// Endpoint Admin: Atualizar Email do Cliente e Gerar Token
+app.put('/api/admin/pedidos/:pedidoId', async (req, res) => {
+  try {
+    const { pedidoId } = req.params;
+    const { email } = req.body;
+    
+    await doc.loadInfo();
+    const sheet = Object.values(doc.sheetsById).find(s => s.title === 'Pedidos');
+    if (!sheet) return res.status(500).json({error: "Aba Pedidos não encontrada"});
+    
+    // Força a existência dos cabeçalhos na planilha
+    await sheet.loadHeaderRow();
+    if (!sheet.headerValues.includes('TokenAcesso')) {
+        const newHeaders = [...sheet.headerValues];
+        if (!newHeaders.includes('EmailCliente')) newHeaders.push('EmailCliente');
+        newHeaders.push('TokenAcesso');
+        await sheet.setHeaderRow(newHeaders);
+    }
+    
+    const rows = await sheet.getRows();
+    const targetRow = rows.find(r => r.get('PedidoID') === pedidoId);
+    
+    if (!targetRow) return res.status(404).json({error: "Pedido não encontrado na planilha"});
+    
+    let token = targetRow.get('TokenAcesso');
+    if (!token) {
+      token = randomUUID();
+      targetRow.assign({ TokenAcesso: token });
+    }
+    
+    // Suporta qualquer alteração vinda do Front
+    const updates: any = {};
+    if (email !== undefined) updates.EmailCliente = email;
+    if (req.body.Coordenador !== undefined) updates.Coordenador = req.body.Coordenador;
+    if (req.body.ResponsavelCampo !== undefined) updates.ResponsavelCampo = req.body.ResponsavelCampo;
+    if (req.body.StatusPrazo !== undefined) updates.StatusPrazo = req.body.StatusPrazo;
+    if (req.body.Percentual !== undefined) updates.Percentual = req.body.Percentual;
+    
+    if (Object.keys(updates).length > 0) {
+       targetRow.assign(updates);
+    }
+    
+    await targetRow.save();
+    cachedData = null; // Força recarregar os dados novos após atualizar a planilha
+    
+    res.json({ success: true, token, baseData: targetRow.toObject() });
+  } catch(e) {
+    console.error(e);
+    res.status(500).json({error: "Erro ao tentar atualizar o pedido."});
+  }
+});
+
+// Endpoint Admin: Criar Pedido Novo
+app.post('/api/admin/pedidos', async (req, res) => {
+  try {
+    const { PedidoID, Coordenador, ResponsavelCampo, Percentual, StatusPrazo } = req.body;
+    await doc.loadInfo();
+    const sheet = Object.values(doc.sheetsById).find(s => s.title === 'Pedidos');
+    if (!sheet) return res.status(500).json({error: "Aba não encontrada"});
+    
+    await sheet.loadHeaderRow();
+    
+    const newRowData = {
+      PedidoID,
+      Coordenador: Coordenador || 'Pendente',
+      ResponsavelCampo: ResponsavelCampo || 'Pendente',
+      Percentual: Percentual || '0',
+      StatusPrazo: StatusPrazo || 'Em andamento',
+      DataRelatorio: new Date().toISOString().split('T')[0]
+    };
+    
+    await sheet.addRow(newRowData);
+    cachedData = null;
+    res.json({ success: true });
+  } catch(e) {
+    console.error(e);
+    res.status(500).json({error: "Erro na inserção do pedido"});
+  }
+});
+
+// Endpoint Admin: Deletar Pedido (Cascade)
+app.delete('/api/admin/pedidos/:pedidoId', async (req, res) => {
+  try {
+    const { pedidoId } = req.params;
+    await doc.loadInfo();
+    
+    const sheetsToClear = ['Pedidos', 'Ocorrencias', 'Progresso_Diario', 'Metricas_Resumo'];
+    
+    for (const title of sheetsToClear) {
+      const sheet = Object.values(doc.sheetsById).find(s => s.title === title);
+      if(sheet) {
+        const rows = await sheet.getRows();
+        const toDelete = rows.filter(r => r.get('PedidoID') === pedidoId);
+        
+        // Deletamos individualmente
+        for (const row of toDelete) {
+          await row.delete();
+        }
+      }
+    }
+    
+    cachedData = null;
+    res.json({success: true, message: "Exclusão multi-planilhas concluída."});
+  } catch(e) {
+    console.error(e);
+    res.status(500).json({error: "Falha catastrófica durante exclusão"});
   }
 });
 
